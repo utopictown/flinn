@@ -1,0 +1,32 @@
+services:
+  wte-api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    container_name: wte-api
+    links:
+      - mysql
+    networks:
+      - backnet
+    env_file:
+      - .env
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+      - "33060:33060"
+    container_name: hdfst-mysql
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - backnet
+    environment:
+      - MYSQL_DATABASE=hdfst
+      - MYSQL_ROOT_PASSWORD=123456
+networks:
+  backnet:
+volumes:
+  db:
+    driver: local
