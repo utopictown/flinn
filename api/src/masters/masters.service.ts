@@ -24,7 +24,6 @@ export class MastersService {
 
     if (masters.length) {
       masters[0].owner = existedOwner;
-
       this.mastersRepository.save(masters[0]);
     } else {
       this.dataSource.transaction(async (manager) => {
@@ -39,8 +38,10 @@ export class MastersService {
   }
 
   async findAll() {
-    const result = await this.mastersRepository.find()[0];
+    const result = await this.mastersRepository.find();
 
-    return { ...this.response, data: result };
+    if (!result.length) return { ...this.response, message: 'No master found' };
+
+    return { ...this.response, data: result[0].owner };
   }
 }

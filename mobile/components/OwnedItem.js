@@ -2,6 +2,8 @@ import React from "react";
 import { Text, View } from "react-native";
 import ItemLayout from "./ItemLayout";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import calculateAge from "../helpers/calculateAge";
+import capitalizeString from "../helpers/capitalizeString";
 
 const OwnedItem = ({ data }) => {
   return (
@@ -11,11 +13,13 @@ const OwnedItem = ({ data }) => {
       <View style={{ flex: 1 }}>
         <View>
           <Text style={{ fontSize: 14, color: "black", lineHeight: 22, fontWeight: "700", marginBottom: 8 }}>
-            {data.name}
+            {capitalizeString(data.name)}
           </Text>
           <View style={{ flexDirection: "row" }}>
             <Text style={{ fontSize: 12, fontWeight: "450", lineHeight: "15.18px", color: "#A1AFC3" }}>Age:</Text>
-            <Text style={{ fontSize: 12, fontWeight: "450", lineHeight: "15.18px", color: "#A1AFC3" }}>{data.age}</Text>
+            <Text style={{ fontSize: 12, fontWeight: "450", lineHeight: "15.18px", color: "#A1AFC3" }}>
+              {calculateAge(data.dob)}
+            </Text>
           </View>
         </View>
       </View>

@@ -1,16 +1,11 @@
-import { StatusBar } from "expo-status-bar";
-import { ActivityIndicator, Button, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import OwnerCard from "../components/OwnerCard";
-import Owned from "../components/Owned";
+import { RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
 import SectionTitle from "../components/SectionTitle";
-import SelectDropdown from "react-native-select-dropdown";
-import OwnerList from "../components/OwnerList";
+import OwnerItem from "../components/OwnerItem";
 import SortSection, { NAME } from "../components/SortSection";
-import { useInfiniteQuery, useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import getOwnerList from "../queries/get-owner-list";
 import { useCallback, useState } from "react";
+import Loading from "../components/Loading";
 
 const HomeScreen = ({ route }) => {
   const sortBy = route.params?.sortBy ?? NAME;
@@ -18,7 +13,7 @@ const HomeScreen = ({ route }) => {
     ["getOwnerList", { sortBy }],
     ({ pageParam = 1 }) => getOwnerList({ pageParam, sortBy }),
     {
-      getNextPageParam: (lastPage, pages) => lastPage.nextPage,
+      getNextPageParam: (lastPage, pages) => lastPage.nextPage ?? undefined,
     }
   );
 
@@ -35,8 +30,6 @@ const HomeScreen = ({ route }) => {
 
   const onScrollEnd = useCallback(() => fetchNextPage(), []);
 
-  console.log(data);
-
   return (
     <View>
       <View style={{ justifyContent: "space-between", flexDirection: "row", position: "relative" }}>
@@ -48,13 +41,11 @@ const HomeScreen = ({ route }) => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         onMomentumScrollEnd={onScrollEnd}
       >
-        {status === "loading" ? (
-          <Text>Loading...</Text>
-        ) : status === "error" ? (
-          <Text>Error: {error.message}</Text>
+        {status === "loading" || status === "error" ? (
+          <Loading />
         ) : (
           data.pages.map((page) =>
-            page.data.map((_data) => <OwnerList key={_data.id} data={_data} isFavorited={_data.isFavorited} />)
+            page.data.map((_data) => <OwnerItem key={_data.id} data={_data} isFavorited={_data.isFavorited} />)
           )
         )}
       </ScrollView>

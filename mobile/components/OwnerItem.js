@@ -1,21 +1,18 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import CircleAlp from "./CircleAlp";
 import ItemLayout from "./ItemLayout";
-import SectionTitle from "./SectionTitle";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
-import { useMutation } from "react-query";
-import addFavorite from "../mutations/add-favorite";
+import capitalizeString from "../helpers/capitalizeString";
+import FavoriteToggle from "./FavoriteToggle";
 
-const OwnerList = ({ isFavorited, data }) => {
+const OwnerItem = ({ isFavorited, data }) => {
   const { navigate } = useNavigation();
 
-  const { mutate, isLoading } = useMutation(addFavorite);
-
-  const handlePressItem = () => {
-    navigate("Detail", { id: "nyaa" });
-  };
+  const handlePressItem = useCallback((id) => {
+    navigate("Detail", { id });
+  }, []);
 
   return (
     <View>
@@ -30,7 +27,10 @@ const OwnerList = ({ isFavorited, data }) => {
           marginBottom: 16,
         }}
       >
-        <TouchableOpacity onPress={handlePressItem} style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+        <TouchableOpacity
+          onPress={() => handlePressItem(data.id)}
+          style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
+        >
           <CircleAlp
             style={{
               marginLeft: 16,
@@ -42,8 +42,8 @@ const OwnerList = ({ isFavorited, data }) => {
             }}
           >
             <Text style={{ fontSize: 15, color: "white", fontWeight: "600" }}>
-              {data.firstName[0]}
-              {data.lastName[0]}
+              {data.firstName[0].toUpperCase()}
+              {data.lastName[0].toUpperCase()}
             </Text>
           </CircleAlp>
           <Text
@@ -54,20 +54,12 @@ const OwnerList = ({ isFavorited, data }) => {
               fontWeight: "450",
             }}
           >
-            {data.firstName} {data.lastName}
+            {capitalizeString(data.firstName)} {capitalizeString(data.lastName)}
           </Text>
         </TouchableOpacity>
-        {isFavorited ? (
-          <Pressable onPress={() => mutate(data.id)}>
-            <AntDesign name="star" size={20} color="#7C42FF" />
-          </Pressable>
-        ) : (
-          <Pressable onPress={() => mutate(data.id)}>
-            <AntDesign name="staro" size={20} color="#DCDCDC" />
-          </Pressable>
-        )}
+        <FavoriteToggle id={data.id} isFavorited={isFavorited} />
 
-        <Pressable onPress={handlePressItem} style={{ padding: 26, paddingLeft: 19 }}>
+        <Pressable onPress={() => handlePressItem(data.id)} style={{ padding: 26, paddingLeft: 3 }}>
           <AntDesign name="right" size={12} color="#B2B2B2" />
         </Pressable>
       </ItemLayout>
@@ -75,4 +67,4 @@ const OwnerList = ({ isFavorited, data }) => {
   );
 };
 
-export default OwnerList;
+export default OwnerItem;

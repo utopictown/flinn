@@ -1,5 +1,5 @@
 import { Owner } from 'src/owners/entities/owner.entity';
-import { Entity, PrimaryGeneratedColumn, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 
 @Entity()
 export class Master {
@@ -7,5 +7,6 @@ export class Master {
   id: number;
 
   @OneToOne(() => Owner, { eager: true })
+  @JoinColumn({ name: 'ownerId' })
   owner: Owner;
 }

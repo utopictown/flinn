@@ -15,9 +15,9 @@ export class OwnersService {
   private response: { data: any; message: string } = { data: '', message: '' };
 
   async addFavorite(id: number) {
-    const owners = await this.ownersRepository.findOneOrFail({ where: { id } });
+    const owners = await this.ownersRepository.findOneOrFail({ where: { id }, select: { cats: false } });
     owners.isFavorited = true;
-    this.ownersRepository.update({ id }, owners);
+    this.ownersRepository.save(owners);
 
     return { ...this.response, message: 'Successfully favoriting owner' };
   }
@@ -25,7 +25,7 @@ export class OwnersService {
   async removeFavorite(id: number) {
     const owners = await this.ownersRepository.findOneOrFail({ where: { id } });
     owners.isFavorited = false;
-    this.ownersRepository.update({ id }, owners);
+    this.ownersRepository.save(owners);
 
     return { ...this.response, message: 'Successfully unfavoriting owner' };
   }
@@ -35,7 +35,7 @@ export class OwnersService {
     let sortBy = {};
     let isSortByCatsCount = false;
 
-    const limit = 3;
+    const limit = 8;
     const skip = ((Number(query.page) ? Number(query.page) : 1) - 1) * limit;
 
     if (query.sortBy) {
