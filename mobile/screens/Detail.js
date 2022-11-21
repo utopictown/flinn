@@ -42,8 +42,8 @@ const DetailScreen = () => {
     };
   }, [data]);
 
-  const handleButton = useCallback((id) => {
-    mutateAsync(id);
+  const handleButton = useCallback(async (id) => {
+    await mutateAsync(id);
   }, []);
 
   if (isLoading || !data?.data || isError) return <Loading />;

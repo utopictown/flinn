@@ -1,4 +1,4 @@
-import { Owner } from 'src/owners/entities/owner.entity';
+import { Owner } from '../../owners/entities/owner.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
 
 @Entity()

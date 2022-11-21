@@ -3,7 +3,7 @@ import { SetMasterDto } from './dto/set-master.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Master } from './entities/master.entity';
-import { Owner } from 'src/owners/entities/owner.entity';
+import { Owner } from '../owners/entities/owner.entity';
 
 @Injectable()
 export class MastersService {

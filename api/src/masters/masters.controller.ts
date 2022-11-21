@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { MastersService } from './masters.service';
 import { SetMasterDto } from './dto/set-master.dto';
-import { Public } from 'src/utils';
+import { Public } from '../utils';
 
 @Controller('masters')
 export class MastersController {

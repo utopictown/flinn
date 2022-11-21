@@ -1,5 +1,5 @@
 import { IsBoolean } from 'class-validator';
-import { Cat } from 'src/cats/entities/cat.entity';
+import { Cat } from '../../cats/entities/cat.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
